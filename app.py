@@ -284,7 +284,7 @@ def run_forecast_with_params(params_dict, status_text=None, progress_bar=None):
         import time
 
         process = subprocess.Popen(
-            [sys.executable, "finalpm6_kaggle.py"],
+            [sys.executable, "CONQ006_PM6.py"],
             cwd=current_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
@@ -1189,7 +1189,7 @@ def main():
                 "Return Clip Quantile",
                 min_value=0.95,
                 max_value=0.999,
-                value=0.97,
+                value=0.9666050519509314,
                 step=0.001,
                 help="Quantile for clipping extreme returns"
             )
@@ -1198,7 +1198,7 @@ def main():
                 "Half-Life (days)",
                 min_value=10,
                 max_value=120,
-                value=60,
+                value=41,
                 step=5,
                 help="Half-life for exponential damping"
             )
@@ -1207,7 +1207,7 @@ def main():
                 "Mean Revert Alpha",
                 min_value=0.02,
                 max_value=0.10,
-                value=0.06,
+                value=0.06370043603749463,
                 step=0.01,
                 help="Mean reversion strength coefficient"
             )
@@ -1216,7 +1216,7 @@ def main():
                 "Mean Revert Start Day",
                 min_value=10,
                 max_value=65,
-                value=40,
+                value=28,
                 step=5,
                 help="Day to start applying mean reversion"
             )
@@ -1226,7 +1226,7 @@ def main():
                 "Fair Up Multiplier",
                 min_value=1.25,
                 max_value=1.60,
-                value=1.40,
+                value=1.4583280453345258,
                 step=0.05,
                 help="Multiplier for upward fair value adjustment"
             )
@@ -1235,7 +1235,7 @@ def main():
                 "Fair Down Multiplier",
                 min_value=0.65,
                 max_value=0.90,
-                value=0.75,
+                value=0.8462786873053278,
                 step=0.05,
                 help="Multiplier for downward fair value adjustment"
             )
@@ -1244,7 +1244,7 @@ def main():
                 "Trend Lookback",
                 min_value=25,
                 max_value=60,
-                value=30,
+                value=57,
                 step=5,
                 help="Days to look back for trend analysis"
             )
@@ -1253,7 +1253,7 @@ def main():
                 "Trend Return Threshold",
                 min_value=0.08,
                 max_value=0.25,
-                value=0.18,
+                value=0.23490859000899916,
                 step=0.01,
                 help="Minimum return to classify as strong trend"
             )
@@ -1277,6 +1277,24 @@ def main():
                 use_container_width=True,
                 help="Run the forecast model with custom parameters"
             )
+
+            # Reset parameters button
+            reset_btn = st.button(
+                "🔄 Reset to Default Parameters",
+                use_container_width=True,
+                help="Reset all parameters to their default values"
+            )
+
+            if reset_btn:
+                # Only clear slider-related session state keys, not everything
+                keys_to_clear = [key for key in st.session_state.keys()
+                                if not key.startswith('_')]
+                for key in keys_to_clear:
+                    del st.session_state[key]
+                st.success("✅ Parameters reset to default values!")
+                # Mark that reset was performed to prevent re-triggering on reload
+                st.session_state['_reset_done'] = True
+                st.rerun()
 
             if run_forecast_btn:
                 # Prepare parameters dictionary
